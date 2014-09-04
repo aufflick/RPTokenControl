@@ -1,0 +1,3 @@
+[submodule "deps/CategoriesObjC"]
+	path = deps/CategoriesObjC
+	url = https://github.com/jerrykrinock/CategoriesObjC.git
