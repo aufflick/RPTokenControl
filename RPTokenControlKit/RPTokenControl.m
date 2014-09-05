@@ -2230,10 +2230,9 @@ const float halfRingWidth = 2.0 ;
 			[attributedString release] ;
 		}												
 	}
-	
-	
+		
 	// Draw focus ring if we are firstResponder
-	if ([[self window] firstResponder] == self) {
+	if ([[self window] firstResponder] == self && self.focusRingType != NSFocusRingTypeNone) {
 		[self drawFocusRing] ;
     }
 }
