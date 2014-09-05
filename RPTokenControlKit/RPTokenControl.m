@@ -193,32 +193,32 @@ float const tokenBoxTextInset = 2.0 ;
 
 - (void)drawWithAttributes:(NSDictionary*)attr
 			   appendCount:(BOOL)appendCount {
-	NSRect rect = NSMakeRect(_bounds.origin.x, _bounds.origin.y, _bounds.size.width-3, _bounds.size.height-3) ;
+    
+    // First of all, drop decimal part
+    // Second, according to various sources, to get thin stroke line for bezier path
+    // x and y should be shifted by 0.5
+    // (http://stackoverflow.com/questions/8016618/how-to-get-a-1-pixel-line-with-nsbezierpath)
+	NSRect rect = NSMakeRect(floor(_bounds.origin.x) - 0.5,
+                             floor(_bounds.origin.y) - 0.5,
+                             ceil(_bounds.size.width) - 3.0,
+                             ceil(_bounds.size.height) - 3.0);
 
     CGFloat cornerRadiusFactor = [[attr objectForKey:TCCornerRadiusFactorAttributeName] floatValue] ;
     CGFloat widthPaddingMultiplier = [[attr objectForKey:TCWidthPaddingMultiplierAttributeName] floatValue] ;
-    CGFloat cornerRadius = rect.size.height*cornerRadiusFactor ;
+    CGFloat cornerRadius = ceil(rect.size.height*cornerRadiusFactor);
+    
     NSBezierPath *path = [NSBezierPath bezierPathWithRoundedRect:rect
 														  radius:cornerRadius] ;
-    NSColor* color ;
+    NSColor* color;
 	
 	color = [attr objectForKey:TCFillColorAttributeName] ;
-    if(color) {
+    if (color) {
 		[color setFill] ; 
 		[path fill] ;
-	}    
+	}
 	
     color = [attr objectForKey:TCStrokeColorAttributeName] ;
-    if(color) {
-        /*
-         My outlines still look wider than the outlines in NSTokenField.
-         NSBezierPath documentation says that to get the thinnest possible
-         line, set line width to 0.0.  Debugging here, I see that the line
-         width is 1.0, the default I presume.  So I'm going to set it to 0.0,
-         then set it back to the old value after -stroke.  All of this seems to
-         have no effect :(  But according to the documentation, it's the way to,
-         maybe someday, get what we want.
-         */
+    if (color) {
         CGFloat oldLineWidth = [path lineWidth] ;
         [path setLineWidth:0.0] ;
 		[color setStroke] ;
@@ -631,7 +631,7 @@ const float halfRingWidth = 2.0 ;
 	while (layout = [enumerator nextObject]) {
 		NSRect bounds = [layout bounds];
 		bounds.origin.x = x;
-		bounds.origin.y = y + (h-bounds.size.height)/2;
+		bounds.origin.y = y + (h - bounds.size.height) / 2;
 		x += bounds.size.width + gap;
 		[layout setBounds:bounds];
 	}
