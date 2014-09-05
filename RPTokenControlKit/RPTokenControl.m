@@ -1537,7 +1537,7 @@ const float halfRingWidth = 2.0 ;
 	if (canSelect) {
 		NSUInteger modifierFlags = [[NSApp currentEvent] modifierFlags] ;
 		BOOL shiftKeyDown = ((modifierFlags & NSShiftKeyMask) != 0) ;
-		BOOL cmdKeyDown = ((modifierFlags & NSCommandKeyMask) != 0) ;
+		BOOL cmdKeyDown = ((modifierFlags & NSCommandKeyMask) != 0) || _useSimpleSelection;
 		if (index != NSNotFound) {
 			if (cmdKeyDown) {
 				if ([self isSelectedIndex:index]) {
@@ -1821,7 +1821,7 @@ const float halfRingWidth = 2.0 ;
 		_mouseDownPoint = pt ;
 		FramedToken* clickedFramedToken = [self tokenAtPoint:pt] ;
 		NSUInteger modifierFlags = [[NSApp currentEvent] modifierFlags] ;
-		BOOL cmdKeyDown = ((modifierFlags & NSCommandKeyMask) != 0) ;
+		BOOL cmdKeyDown = ((modifierFlags & NSCommandKeyMask) != 0) || _useSimpleSelection;
 		if (clickedFramedToken) {
 			[self changeSelectionPerUserActionAtFramedToken:clickedFramedToken] ;
 		}

@@ -435,6 +435,7 @@ extern NSString* const RPTokenControlUserDeletedTokensKey ;
 @property (copy) NSString* notApplicablePlaceholder ;
 @property (assign) CGFloat fixedFontSize ;
 @property (assign) RPTokenControlEditability editability ;
+@property BOOL useSimpleSelection;
 
 /*!
  @brief    An NSArray of the tokens selected in the control view
