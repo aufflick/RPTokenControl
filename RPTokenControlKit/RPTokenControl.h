@@ -418,6 +418,8 @@ extern NSString* const RPTokenControlUserDeletedTokensKey ;
 	NSTextField* _textField ;
 	BOOL _isDoingLayout ;
 	NSPoint _mouseDownPoint ; // for hysteresis in beginning drag
+    NSSize _bestSize;
+    BOOL   _autolayoutEnabled;
 }
 
 @property (retain) id objectValue ;

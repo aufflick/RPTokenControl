@@ -637,6 +637,14 @@ const float halfRingWidth = 2.0 ;
 	}
 }
 
+- (NSSize)fittingSize {
+    return _bestSize;
+}
+
+- (NSSize)intrinsicContentSize {
+    return _bestSize;
+}
+
 - (void)doLayout {
 	if(_framedTokens != nil) {
 		return ;
@@ -819,9 +827,10 @@ const float halfRingWidth = 2.0 ;
 				focusRingLeftOfFirstToken = NO ;
 				[_framedTokens addObjectsFromArray:previousLine];
 			}
-			
-			// If superview does not scroll, see if we can fit more tokens
-			if ((scrollView==nil) && (pt.y + maxHeight > frame.size.height)) {
+
+			// If superview does not scroll and no autolayout see if we can fit more tokens
+            // in
+			if ((scrollView==nil) && (!_autolayoutEnabled) && (pt.y + maxHeight > frame.size.height)) {
 				// Vertical overflow in a non-scrolling view
 				
 				// Replace the proposed currentToken (which caused an overflow)
@@ -940,6 +949,14 @@ const float halfRingWidth = 2.0 ;
 	_isDoingLayout = YES ;
 	if (scrollView == nil) {
 		// No scroll view, so do not change the frame size
+        _bestSize.width = frame.size.width;
+        _bestSize.height = requiredHeight;
+        if (_autolayoutEnabled) {
+            NSLog(@"Setting autosize to %@", NSStringFromSize(_bestSize));
+            [self invalidateIntrinsicContentSize];
+            [self setNeedsUpdateConstraints:YES];
+            [self.superview setNeedsUpdateConstraints:YES];
+        }
 	}
 	else if (requiredHeight > scrollViewHeight) {
 		frame.size.height = requiredHeight ;
@@ -955,9 +972,11 @@ const float halfRingWidth = 2.0 ;
 											 hasVerticalScroller:[scrollView hasVerticalScroller]
 													  borderType:[scrollView borderType]].width ; 
 	}
-	[self setFrameSize:frame.size] ;
-	_isDoingLayout = NO ;
-	
+    
+    if (!_autolayoutEnabled)
+        [self setFrameSize:frame.size];
+    
+	_isDoingLayout = NO;	
 	
 	// Remove old toolTips
 	// Remember this, because, -removeAllToolTips removes both
@@ -1974,12 +1993,14 @@ const float halfRingWidth = 2.0 ;
     [self setTokenColorScheme:RPTokenControlTokenColorSchemeBlue] ;
     [self setCornerRadiusFactor:0.5] ;
     [self setWidthPaddingMultiplier:3.0] ;
+    _autolayoutEnabled = [self respondsToSelector:@selector(intrinsicContentSize)];
 }
 
 - (id) initWithFrame:(NSRect)frame {
 	self = [super initWithFrame:frame];
 	if (self != nil) {
 		[self initCommon];
+        _bestSize = frame.size; // start with provided frame
 	}
 	
 	return self ;
