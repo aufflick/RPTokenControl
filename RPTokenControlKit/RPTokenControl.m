@@ -1263,6 +1263,21 @@ const float halfRingWidth = 2.0 ;
 	return [output autorelease] ;
 }
 
+- (void)setSelectedTokens:(NSArray *)tokens {
+    NSSet *tokenSet = [NSSet setWithArray:tokens];
+    NSMutableIndexSet *indexes = [NSMutableIndexSet indexSet];
+    
+    for (NSUInteger i = 0; i < _framedTokens.count; i++) {
+        FramedToken *fToken = _framedTokens[i];
+        if ([tokenSet containsObject:fToken.token.text]) {
+            [indexes addIndex:i];
+        }
+    }
+    
+    [self setSelectedIndexSet:indexes];
+    [self setNeedsDisplay];
+}
+
 #pragma mark * Typing In New Tokens
 
 - (void)updateTextFieldFrame {

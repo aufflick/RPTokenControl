@@ -465,6 +465,8 @@ extern NSString* const RPTokenControlUserDeletedTokensKey ;
  */
 - (void)setSelectedIndexSet:(NSIndexSet*)newSelectedIndexSet ;
 
+- (void)setSelectedTokens:(NSArray *)tokens;
+
 /*!
  @brief    setter for ivar maxTokensToDisplay
  @details  Invoking this method will recalculate the receiver's layout
