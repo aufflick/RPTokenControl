@@ -952,7 +952,6 @@ const float halfRingWidth = 2.0 ;
         _bestSize.width = frame.size.width;
         _bestSize.height = requiredHeight;
         if (_autolayoutEnabled) {
-            NSLog(@"Setting autosize to %@", NSStringFromSize(_bestSize));
             [self invalidateIntrinsicContentSize];
             [self setNeedsUpdateConstraints:YES];
             [self.superview setNeedsUpdateConstraints:YES];
